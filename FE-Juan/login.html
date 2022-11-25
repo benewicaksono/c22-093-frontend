@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- contact section starts  -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- swiper css link  -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+<section class="contact" id="contact">
+
+    <h1 class="heading"><span>Log</span> In</h1>
+
+    <div class="row">
+
+    <div class="image">
+        <img src="images/contact-img.svg" alt="">
+    </div>
+
+    <form action="" method="post">
+        <span>your name</span>
+        <input type="text" required placeholder="enter your full name" maxlength="50" name="name" class="box">
+        <span>your email</span>
+        <input type="email" required placeholder="enter your valie email" maxlength="50" name="email" class="box">
+        <span>your number</span>
+        <input type="number" required placeholder="enter your valie number" max="9999999999" min="0" name="number"
+            class="box" onkeypress="if(this.value.length == 10) return false;">
+        <span>select course</span>
+        <select name="couses" class="box" required>
+            <option value="" disabled selected>select the course --</option>
+            <option value="English for Beginner">English for Beginner</option>
+            <option value="Intermediate English">Intermediate English</option>
+            <option value="Advance English">Advance English</option>
+            <option value="Expert English">Expert English</option>
+            <span>select gender</span>
+            <!-- <div class="radio">
+                <input type="radio" name="gender" value="male" id="male">
+                <label for="male">male</label>
+                <input type="radio" name="gender" value="female" id="female">
+                <label for="female">female</label>
+            </div> -->
+            <input type="submit" value="submit" class="btn" name="send">
+    </form>
+
+    </div>
+
+</section>
+</body>
+
+</html>
