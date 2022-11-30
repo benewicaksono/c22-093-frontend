@@ -258,37 +258,37 @@ section{
    background-color: var(--green);
 }
 
-.teachers .slide{
+.developers .slide{
    position: relative;
    overflow: hidden;
    margin-bottom: 4rem;
    user-select: none;
 }
 
-.teachers .slide img{
+.developers .slide img{
    height: 55rem;
    width: 100%;
    object-fit: cover;
    border-radius: .5rem;
 }
 
-.teachers .slide h3{
+.developers .slide h3{
    margin-top: 1.5rem;
    font-size: 2rem;
    text-align: center;
    color:var(--white);
 }
 
-.teachers .slide .share{
+.developers .slide .share{
    position: absolute;
    top:1rem; left:-10rem;
 }
 
-.teachers .slide:hover .share{
+.developers .slide:hover .share{
    left: 2rem;
 }
 
-.teachers .slide .share a{
+.developers .slide .share a{
    display: block;
    margin-top: 1rem;
    height: 4.5rem;
@@ -301,7 +301,7 @@ section{
    font-size: 2rem;
 }
 
-.teachers .slide .share a:hover{
+.developers .slide .share a:hover{
    background-color: var(--green);
    color:var(--white);
 }

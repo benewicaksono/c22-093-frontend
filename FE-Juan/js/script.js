@@ -32,7 +32,7 @@ var swiper = new Swiper(".course-slider", {
    },
 });
 
-var swiper = new Swiper(".teachers-slider", {
+var swiper = new Swiper(".developers-slider", {
    spaceBetween: 20,
    grabCursor:true,
    loop:true,
