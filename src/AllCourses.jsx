@@ -13,15 +13,32 @@ function AllCourses() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   useEffect(() => {
+    document.title = 'All Courses';
     const token = getTokenFromSession();
-    axios.get(`https://c22-093-backend.vercel.app/api/userData/session/${token}`)
+    // convert axios request to fetch
+    fetch(`https://c22-093-backend.vercel.app/api/userData/session/${token}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+
+      },
+    })
+      .then((res) => res.json())
       .then((res) => {
-        if (res.data === 'null' || res.data === null) {
+        if (res === 'null' || res === null) {
           navigateTo('/login');
         }
-      }).then(() => {
-        axios.get('https://c22-093-backend.vercel.app/api/material')
-          .then((res) => setData(res.data.data))
+      })
+      .then(() => {
+        fetch('https://c22-093-backend.vercel.app/api/material', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => setData(res.data))
           .then(() => setLoading(false));
       });
   }, []);
@@ -38,9 +55,7 @@ function AllCourses() {
           <div className="justify-between px-4 mx-auto lg:max-w-7xl items-center flex md:px-8">
 
             <div className="py-3 md:py-5">
-              <a>
-                <h2 className="text-2xl text-accent font-bold">English Courses</h2>
-              </a>
+              <h2 className="text-2xl text-accent font-bold">English Courses</h2>
             </div>
 
             <div
@@ -48,7 +63,7 @@ function AllCourses() {
             >
               <ul className=" space-y-8 md:flex md:space-x-6 md:space-y-0 cursor-pointer">
                 <li className="text-secondary  bg-accent px-4 rounded py-3" onClick={logoutHanlder}>
-                  <Link to="/login">Logout</Link>
+                  Logout
                 </li>
               </ul>
 
@@ -70,12 +85,14 @@ function AllCourses() {
             <span className="sr-only">Loading...</span>
           </div>
           {data && data.map((item) => (
-            <div key={item.key} className="block p-6 rounded-lg shadow-lg bg-secondary max-w-sm">
-              <h5 className="text-xl leading-tight font-medium mb-2">{item.name}</h5>
-              <p className="text-slate-300 mb-4">
-                Some quick example text to build on the card title and make up the bulk of the
-                card&apos;s content.
-              </p>
+            <div key={item.key} className="flex flex-col p-6 rounded-lg shadow-lg bg-secondary max-w-sm justify-between ">
+              <div className="">
+                <h5 className="text-xl leading-tight font-medium mb-2">{item.name}</h5>
+                <img src={item.imgUrl} alt={item.name} className="" />
+                <p className="text-slate-300 mb-4 ">
+                  {item.desc.length > 80 ? `${item.desc.substring(0, 80)}...` : item.desc}
+                </p>
+              </div>
               <button type="button" className=" inline-block px-6 py-2.5 bg-accent text-secondary font-medium text-xs leading-tight uppercase rounded shadow-md  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
                 <Link to={`/courses/${item.key}`}> Detail </Link>
               </button>
