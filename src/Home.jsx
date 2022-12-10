@@ -35,11 +35,15 @@ function Home() {
       email: e.target.email.value,
       message: e.target.message.value,
     };
+    console.log(dataKontak);
     try {
       await fetch('https://script.google.com/macros/s/AKfycbyf1TH1jFJbt2LziHBVC9b99Z1KVKVFclVPY-o8fHIRczE16MKIqjj-7djiLwaUSDKI/exec', {
         method: 'POST',
         body: JSON.stringify(dataKontak),
-      }).then(() => {
+      }).then((res) => {
+       return res.json()
+      }).then((res)=>{
+        console.log(res);
         Swal.fire({
           icon: 'success',
           title: 'Success',
@@ -56,7 +60,7 @@ function Home() {
   };
 
   return (
-    <div className=" bg-primary ">
+    <div className=" bg-primary scroll-pt-10">
       <div className="max-w-7xl mx-auto ">
         {/* navigation */}
         <header className="sticky top-0 right-0 left-0 z-[1000] bg-[#4b4b4b] p-3 shadow">
@@ -112,8 +116,11 @@ function Home() {
                   }`}
                 >
                   <ul className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 cursor-pointer">
+
                     <li className="text-white hover:text-slate-400">
-                      <Link to="/">Home</Link>
+                      <LinkScroll to="courses" smooth duration={1000}>
+                        Courses
+                      </LinkScroll>
                     </li>
 
                     <li className="text-white hover:text-slate-400">
@@ -121,6 +128,7 @@ function Home() {
                         Contact Us
                       </LinkScroll>
                     </li>
+                    
                     <li className="text-secondary  bg-accent px-4 rounded py-3">
                       <Link to="/login">Login</Link>
                     </li>
@@ -151,27 +159,29 @@ function Home() {
         </section>
 
         {/* section informasi */}
-        <section className="px-5">
-          <div className="grid grid-cols-auto-fit gap-6 items-start">
-            <div className="bg-[#4b4b4b] rounded-lg flex p-8 justify-evenly gap-8">
-              <div className="">
+        <section className="p-0 lg:px-5 overflow-hidden">
+          <div className="grid grid-cols-auto-fit gap-6">
+            <div className=" w-full lg:w-[80%] mx-auto bg-[#4b4b4b] rounded-lg flex flex-col lg:flex-row py-8 justify-evenly gap-1">
+              <div className="w-1/2 mx-auto">
+
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-12 h-12 mx-auto stroke-accent">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
                 </svg>
               </div>
-              <div className="content">
+              
+              <div className="text-center mx-auto w-1/2">
                 <h3 className="text-white text-3xl mb-2">{data.length}</h3>
                 <p className="text-2xl text-[#aaa]">courses</p>
               </div>
             </div>
-            <div className="bg-[#4b4b4b] rounded-lg flex p-8 justify-evenly gap-8">
-              <div className="">
+            <div className=" w-full lg:w-[80%] mx-auto bg-[#4b4b4b] rounded-lg flex flex-col lg:flex-row py-8 justify-evenly gap-1">
+              <div className="w-1/2 mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-12 h-12 stroke-accent mx-auto">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
 
               </div>
-              <div className="content">
+              <div className="w-1/2 mx-auto text-center">
                 <h3 className="text-white text-3xl mb-2">{user.length}</h3>
                 <p className="text-2xl text-[#aaa]">students</p>
               </div>
@@ -195,7 +205,7 @@ function Home() {
                   beginner to expert
                 </p>
                 <div
-                  className="px-5 py-4 text-xl capitalize bg-[#4b4b4b] rounded-full text-white hover:bg-accent "
+                  className="px-5 py-4 text-xl capitalize bg-[#4b4b4b] rounded-full text-white hover:bg-accent cursor-pointer "
                 >
                   <LinkScroll to="contact-us" smooth duration={1000}>
                     Contact Us
@@ -207,8 +217,8 @@ function Home() {
         </section>
 
         {/* section our courses */}
-        <section className="courses p-4" id="courses">
-          <h1 className="text-6xl text-center text-white uppercase">
+        <section className="courses my-4 p-4 " id="courses">
+          <h1 className="text-6xl pb-4 text-center text-white uppercase">
             our
             {' '}
             <span className="text-[#00E77F]">courses</span>
@@ -275,23 +285,6 @@ function Home() {
         {/* <!-- footer section starts  --> */}
 
         <footer className="footer bg-secondary flex flex-col mt-5 py-5">
-          <div className="share flex justify-center text-3xl gap-4">
-            <div className="text-white rounded-full bg-primary hover:bg-accent p-3">
-              <a href='https://www.instagram.com/dwinabelaa_' target="_blank" rel="noreferrer">
-                <FaInstagram />
-              </a>
-            </div>
-            <div className="text-white rounded-full bg-primary hover:bg-accent p-3">
-              <a href='https://www.linkedin.com/in/dwinabela/' target="_blank" rel="noreferrer">
-                <FaLinkedin />
-              </a>
-            </div>
-            <div className="text-white rounded-full bg-primary hover:bg-accent p-3">
-              <a href='https://github.com/dwinabelaa' target="_blank" rel="noreferrer">
-                <FaGithub />
-              </a>
-            </div>
-          </div>
 
           <div className="credit mt-3 text-center text-slate-50">
             &copy; copyright @ 2022 by
