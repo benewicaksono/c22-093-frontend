@@ -1,95 +1,72 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Navigation } from 'swiper';
-
-import { Swiper, SwiperSlide } from 'swiper/react';
-
 import { Link as LinkScroll } from 'react-scroll';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-
 import {
-  FaFacebookF,
-  FaTwitter,
   FaInstagram,
   FaLinkedin,
-  FaYoutube,
+  FaGithub,
 } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import StarRating from './components/StarRating';
+import Swal from 'sweetalert2';
 
 function Home() {
   const [data, setData] = useState([]);
   const [navbar, setNavbar] = useState(false);
+  const [user, setUser] = useState([]);
   useEffect(() => {
-    axios.get('https://c22-093-backend.vercel.app/api/material')
-      .then((res) => {
-      // get only 3 item
-        setData(res.data.data);
-      });
+    document.title = 'Home | English Courses';
+    const requestMaterial = axios.get('https://c22-093-backend.vercel.app/api/material');
+    const requestUser = axios.get('https://c22-093-backend.vercel.app/api/userData/users');
+    axios.all([requestMaterial, requestUser]).then(axios.spread((...responses) => {
+      const responseOne = responses[0];
+      const responseTwo = responses[1];
+      // use/access the results
+      setData(responseOne.data.data);
+      setUser(responseTwo.data);
+    }));
   }, []);
 
-  const REVIEWS = [
-    {
-      nama: 'Budi',
-      foto: 'images/pic-1.png',
-      review:
-        '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."',
-      bintang: 5,
-    },
-    {
-      nama: 'Budi',
-      foto: 'images/pic-1.png',
-      review:
-        '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."',
-      bintang: 5,
-    },
-    {
-      nama: 'Agus sitohang',
-      foto: 'images/pic-2.png',
-      review:
-        '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."',
-      bintang: 4,
-    },
-    {
-      nama: 'Goro sigundul',
-      foto: 'images/pic-3.png',
-      review:
-        '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."',
-      bintang: 4,
-    },
-    {
-      nama: 'Aku Budi',
-      foto: 'images/pic-4.png',
-      review:
-        '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."',
-      bintang: 4,
-    },
-    {
-      nama: 'Bapak Budi',
-      foto: 'images/pic-5.png',
-      review:
-        '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."',
-      bintang: 5,
-    },
-  ];
+  const kontakFormSubmit = async (e) => {
+    e.preventDefault();
+    const dataKontak = {
+      subject: e.target.subject.value,
+      email: e.target.email.value,
+      message: e.target.message.value,
+    };
+    try {
+      await fetch('https://script.google.com/macros/s/AKfycbyf1TH1jFJbt2LziHBVC9b99Z1KVKVFclVPY-o8fHIRczE16MKIqjj-7djiLwaUSDKI/exec', {
+        method: 'POST',
+        body: JSON.stringify(dataKontak),
+      }).then(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Message sent successfully',
+        });
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      });
+    }
+  };
+
   return (
     <div className=" bg-primary ">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto ">
         {/* navigation */}
         <header className="sticky top-0 right-0 left-0 z-[1000] bg-[#4b4b4b] p-3 shadow">
           <nav className="w-full">
             <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
               <div>
                 <div className="flex items-center justify-between py-3 md:py-5 md:block">
-                  <a href="javascript:void(0)">
-                    <h2 className="text-2xl text-accent font-bold">English Courses</h2>
-                  </a>
+
+                  <h2 className="text-2xl text-accent font-bold">English Courses</h2>
+
                   <div className="md:hidden">
                     <button
                       className="p-2 text-white rounded-md outline-none focus:border-gray-400 focus:border"
@@ -155,7 +132,7 @@ function Home() {
           </nav>
         </header>
         {/* section home */}
-        <section className="home" id="home">
+        <section className="home px-5" id="home">
           <div className="flex flex-col lg:flex-row">
             <div className="text-center m-auto w-1/2 capitalize">
               <h3 className="text-6xl lg:text-9xl  text-white my-5">
@@ -168,13 +145,13 @@ function Home() {
             </div>
 
             <div className="w-1/2 mx-auto ">
-              <img src="/images/homg-img.svg" alt="home-image" className="" />
+              <img src="/images/homg-img.svg" alt="home" />
             </div>
           </div>
         </section>
 
         {/* section informasi */}
-        <section className="">
+        <section className="px-5">
           <div className="grid grid-cols-auto-fit gap-6 items-start">
             <div className="bg-[#4b4b4b] rounded-lg flex p-8 justify-evenly gap-8">
               <div className="">
@@ -195,7 +172,7 @@ function Home() {
 
               </div>
               <div className="content">
-                <h3 className="text-white text-3xl mb-2">20</h3>
+                <h3 className="text-white text-3xl mb-2">{user.length}</h3>
                 <p className="text-2xl text-[#aaa]">students</p>
               </div>
             </div>
@@ -203,7 +180,7 @@ function Home() {
         </section>
 
         {/* section about */}
-        <section className="about py-4" id="about">
+        <section className="about p-4" id="about">
           <div className="flex flex-col lg:flex-row">
             <div className="w-1/2 mx-auto">
               <img src="/images/about-img.svg" alt="about" />
@@ -217,94 +194,46 @@ function Home() {
                   structed learning from
                   beginner to expert
                 </p>
-                <a
-                  href="#contact"
+                <div
                   className="px-5 py-4 text-xl capitalize bg-[#4b4b4b] rounded-full text-white hover:bg-accent "
                 >
                   <LinkScroll to="contact-us" smooth duration={1000}>
                     Contact Us
                   </LinkScroll>
-                </a>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* section our courses */}
-        <section className="courses my-4" id="courses">
+        <section className="courses p-4" id="courses">
           <h1 className="text-6xl text-center text-white uppercase">
             our
             {' '}
             <span className="text-[#00E77F]">courses</span>
           </h1>
-
-          {/* custom arrow color swiper */}
-          <style jsx global>
-            {`
-                .swiper-button-prev,
-                .swiper-button-next {
-                  color: #00e77f;
-                }
-                .swiper-pagination-bullet-active {
-                  background: #00e77f;
-                }
-              `}
-          </style>
           <div>
-            {data && data.slice(0, 3).map((item) => (
-              <div key={item.key} className="text-center p-8 mb-2 text-white ">
-                <h2>{item.name}</h2>
-              </div>
-            ))}
+            <div className="flex flex-col lg:flex-row gap-5">
+              {data && data.slice(0, 3).map((item) => (
+                <div key={item.key} className="text-center p-8 mb-2 text-white rounded overflow-hidden bg-secondary">
+                  <img src={item.imgUrl} alt={item.name} className=" mx-auto overflow-hidden" />
+                  <h2 className="text-xl py-4">{item.name}</h2>
+                </div>
+              ))}
+            </div>
 
-            <button className="px-3 py-2 bg-accent rounded">
-              <Link to="/courses">See All Courses</Link>
-            </button>
+            <div className="text-center mt-3 ">
+
+              <Link className="px-3 py-2 text-center bg-accent rounded mx-auto" to="/courses">See All Courses</Link>
+
+            </div>
           </div>
         </section>
 
-        {/* section review */}
-        <section className="review" id="review">
-          <h1 className="text-6xl text-center text-white uppercase">
-            student's
-            {' '}
-            <span className="text-accent">reviews</span>
-          </h1>
-          <Swiper
-            modules={[Navigation]}
-            spaceBetween={50}
-            slidesPerView={3}
-            navigation
-            pagination={{ clickable: true }}
-            className="mt-2"
-          >
-            {REVIEWS.map((review) => (
-              <SwiperSlide key={review.id}>
-                <div className="flex text-slate-50 flex-col max-w-md bg-secondary rounded p-4">
-                  <p>{review.review}</p>
-                  <div className="flex py-5">
-                    <div className="overflow-hidden mr-2">
-                      <img
-                        className="rounded-full w-20"
-                        src={review.foto}
-                        alt={`foto ${review.nama}`}
-                      />
-                    </div>
-                    <div className="flex flex-col align-middle my-auto text-xl">
-                      <h3 className="">{review.nama}</h3>
-                      <StarRating totalStars={review.bintang} />
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
-        {/* end section reviews */}
-
         {/* section contact us */}
 
-        <section className="my-3" id="contact-us">
+        <section className="my-3 px-4" id="contact-us">
           <h1 className="text-6xl text-slate-50 text-center uppercase">
             Contact
             {' '}
@@ -312,18 +241,24 @@ function Home() {
           </h1>
           <div className="flex flex-col lg:flex-row">
             <div className="w-1/2 mx-auto">
-              <form action="https://script.google.com/macros/s/AKfycbyf1TH1jFJbt2LziHBVC9b99Z1KVKVFclVPY-o8fHIRczE16MKIqjj-7djiLwaUSDKI/exec" method="POST" className="space-y-8">
+              <form onSubmit={kontakFormSubmit} className="space-y-8">
                 <div>
-                  <label htmlFor="email" className="block mb-2 text-md font-medium text-slate-50">Your email</label>
-                  <input name="email" type="email" id="email" className="shadow-sm bg-secondary border border-gray-300 text-slate-50 text-md rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" placeholder="name@email.com" required />
+                  <label htmlFor="email" className="block mb-2 text-md font-medium text-slate-50">
+                    Your email
+                    <input name="email" type="email" id="email" className="shadow-sm bg-secondary border border-gray-300 text-slate-50 text-md rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" placeholder="name@email.com" required />
+                  </label>
                 </div>
                 <div>
-                  <label htmlFor="subject" className="block mb-2 text-md font-medium text-slate-50">Subject</label>
-                  <input name="subject" type="text" id="subject" className="block p-3 w-full text-md text-slate-50 bg-secondary rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" placeholder="Let us know how we can help you" required />
+                  <label htmlFor="subject" className="block mb-2 text-md font-medium text-slate-50">
+                    Subject
+                    <input name="subject" type="text" id="subject" className="block p-3 w-full text-md text-slate-50 bg-secondary rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light" placeholder="Let us know how we can help you" required />
+                  </label>
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor="message" className="block mb-2 text-md font-medium text-slate-100">Your message</label>
-                  <textarea name="message" id="message" rows="6" className="block p-2.5 w-full text-md text-slate-50 bg-secondary rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Leave a comment..." />
+                  <label htmlFor="message" className="block mb-2 text-md font-medium text-slate-100">
+                    Your message
+                    <textarea name="message" id="message" rows="6" className="block p-2.5 w-full text-md text-slate-50 bg-secondary rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Leave a comment..." />
+                  </label>
                 </div>
                 <button type="submit" className="py-3 px-5 text-md font-medium text-center text-primary rounded-lg bg-accent sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 ">Send message</button>
               </form>
@@ -342,19 +277,19 @@ function Home() {
         <footer className="footer bg-secondary flex flex-col mt-5 py-5">
           <div className="share flex justify-center text-3xl gap-4">
             <div className="text-white rounded-full bg-primary hover:bg-accent p-3">
-              <FaFacebookF />
+              <a href='https://www.instagram.com/dwinabelaa_' target="_blank" rel="noreferrer">
+                <FaInstagram />
+              </a>
             </div>
             <div className="text-white rounded-full bg-primary hover:bg-accent p-3">
-              <FaTwitter />
+              <a href='https://www.linkedin.com/in/dwinabela/' target="_blank" rel="noreferrer">
+                <FaLinkedin />
+              </a>
             </div>
             <div className="text-white rounded-full bg-primary hover:bg-accent p-3">
-              <FaInstagram />
-            </div>
-            <div className="text-white rounded-full bg-primary hover:bg-accent p-3">
-              <FaLinkedin />
-            </div>
-            <div className="text-white rounded-full bg-primary hover:bg-accent p-3">
-              <FaYoutube />
+              <a href='https://github.com/dwinabelaa' target="_blank" rel="noreferrer">
+                <FaGithub />
+              </a>
             </div>
           </div>
 
